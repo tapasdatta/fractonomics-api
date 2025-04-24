@@ -16,7 +16,5 @@ class AssetServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . "/../config.php", "asset");
 
         $this->app->register(RouteServiceProvider::class);
-
-        // $this->loadRoutesFrom(__DIR__ . "/../routes/web.php");
     }
 }

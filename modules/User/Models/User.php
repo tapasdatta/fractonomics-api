@@ -38,4 +38,12 @@ class User extends Authenticatable
             "password" => "hashed",
         ];
     }
+
+    public static function createWithAttributes(array $attributes): self
+    {
+        // Create the user with the given attributes
+        $user = self::create($attributes);
+
+        return $user;
+    }
 }
