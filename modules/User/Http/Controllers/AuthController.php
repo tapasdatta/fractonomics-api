@@ -2,8 +2,7 @@
 
 namespace Modules\User\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Modules\User\Http\Requests\CreateUserRequest;
 use Modules\User\Models\User;
 
@@ -20,6 +19,7 @@ class AuthController
 
         return response()->json(
             [
+                "status" => "success",
                 "message" => "User created successfully",
             ],
             201
@@ -36,18 +36,15 @@ class AuthController
             "password" => ["required"],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $token = User::generateToken($credentials);
 
-            //sanctum token generation
-        }
-
-        //return error
         return response()->json(
             [
-                "message" => "Invalid credentials",
+                "status" => "success",
+                "token" => $token,
+                "message" => "Login token generated successfully",
             ],
-            401
+            201
         );
     }
 }
