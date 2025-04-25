@@ -1,0 +1,95 @@
+name: ${APP_NAME:-Laravel}
+
+services:
+    app:
+        container_name: "Fractonomics_app"
+        build:
+            args:
+                user: Fractonomics
+                uid: 1000
+            context: ./.dockerfiles
+            dockerfile: Dockerfile
+        # image: Fractonomics
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+            - ./.dockerfiles/php.ini:/usr/local/etc/php/php.ini
+        networks:
+            - Fractonomics
+        environment:
+            - TZ=Asia/Dhaka
+
+    nginx:
+        image: nginx:alpine
+        container_name: "Fractonomics_nginx"
+        restart: unless-stopped
+        ports:
+            - "${APP_PORT:-80}:80"
+        volumes:
+            - ./:/var/www
+            - ./.dockerfiles:/etc/nginx/conf.d/
+        networks:
+            - Fractonomics
+        environment:
+            - TZ=Asia/Dhaka
+
+    redis:
+        image: redis:alpine
+        container_name: Fractonomics_redis
+        restart: unless-stopped
+        ports:
+            - "${REDIS_PORT:-6379}:6379"
+        networks:
+            - Fractonomics
+        environment:
+            - TZ=Asia/Dhaka
+
+    cron:
+        container_name: Fractonomics_cron
+        build:
+            args:
+                user: Fractonomics
+                uid: 1000
+            context: ./.dockerfiles
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        tty: true
+        volumes:
+            - ./:/var/www
+        networks:
+            - Fractonomics
+        environment:
+            SERVICE_NAME: Fractonomics
+            SERVICE_TAGS: dev
+            DB_CONNECTION:
+            DB_HOST: ${DB_HOST:-localhost}
+            DB_PORT: ${DB_PORT:-3306}:3306
+            DB_DATABASE: ${DB_DATABASE:-Fractonomics}
+            DB_USERNAME: ${DB_USERNAME:-Fractonomics}
+            DB_PASSWORD: ${DB_PASSWORD:-Fractonomics}
+
+    db:
+        image: mysql:8.4
+        container_name: Fractonomics_db
+        restart: always
+        volumes:
+            - ./.dockerfiles/dbdata:/var/lib/mysql
+            - ./.dockerfiles/my.cnf:/etc/mysql/my.cnf
+        ports:
+            - "${DB_PORT:-3306}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: ${DB_DATABASE:-Fractonomics}
+            MYSQL_USER: ${DB_USERNAME:-Fractonomics}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-Fractonomics}
+        networks:
+            - Fractonomics
+
+networks:
+    Fractonomics:
+        driver: bridge
+
+volumes:
+    dbdata:
+        driver: local
