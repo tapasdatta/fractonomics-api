@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Currency\Enums;
+namespace Modules\Asset\Enums;
 
 enum Currency: string
 {
