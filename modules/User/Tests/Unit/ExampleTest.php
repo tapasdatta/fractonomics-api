@@ -1,5 +1,9 @@
 <?php
 
-test('that true is true', function () {
-    expect(true)->toBeTrue();
+use Modules\User\Models\User;
+
+test("that true is true", function () {
+    $user = User::factory()->create();
+
+    $this->assertTrue($user->exists);
 });
