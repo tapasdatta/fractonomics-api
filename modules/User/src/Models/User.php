@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\User\Database\Factories\UserFactory;
 
 // use Modules\User\Database\Factories\UserFactory;
 
@@ -72,8 +73,8 @@ class User extends Authenticatable
         return $token;
     }
 
-    // protected static function newFactory(): UserFactory
-    // {
-    //     return UserFactory::new();
-    // }
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
 }
