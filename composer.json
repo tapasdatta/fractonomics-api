@@ -30,9 +30,13 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\User\\Database\\Factories\\": "modules/User/Database/factories/",
-            "Modules\\User\\Database\\Seeders\\": "modules/User/Database/seeders/",
-            "Modules\\": "modules/"
+            "Modules\\": "modules/",
+            "Modules\\User\\": "modules/User/src",
+            "Modules\\User\\Database\\Seeders\\": "modules/User/database/seeders/",
+            "Modules\\User\\Database\\Factories\\": "modules/User/database/factories/",
+            "Modules\\Asset\\": "modules/Asset/src",
+            "Modules\\Asset\\Database\\Seeders\\": "modules/Asset/database/seeders/",
+            "Modules\\Asset\\Database\\Factories\\": "modules/Asset/database/factories/"
         }
     },
     "autoload-dev": {

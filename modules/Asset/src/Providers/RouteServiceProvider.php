@@ -16,6 +16,6 @@ class RouteServiceProvider extends BaseRouteServiceProvider
     {
         Route::middleware("api")
             ->prefix("api/assets")
-            ->group(__DIR__ . "/../routes.php");
+            ->group(__DIR__ . "/../../routes/routes.php");
     }
 }

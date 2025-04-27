@@ -10,7 +10,7 @@
             <directory>./modules/*/tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory>./modules/*/Tests/Feature</directory>
+            <directory>./modules/*/tests/Feature</directory>
         </testsuite>
     </testsuites>
     <source>

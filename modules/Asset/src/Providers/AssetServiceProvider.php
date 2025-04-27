@@ -11,9 +11,9 @@ class AssetServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . "/../Database/migrations");
+        $this->loadMigrationsFrom(__DIR__ . "/../../database/migrations");
 
-        $this->mergeConfigFrom(__DIR__ . "/../config.php", "asset");
+        $this->mergeConfigFrom(__DIR__ . "/../../config/config.php", "asset");
 
         $this->app->register(RouteServiceProvider::class);
     }
