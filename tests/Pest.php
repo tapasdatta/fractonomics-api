@@ -11,9 +11,12 @@
 |
 */
 
-pest()->extend(Tests\TestCase::class)
- // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+use Modules\User\Models\User;
+
+pest()
+    ->extend(Tests\TestCase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->in("../modules/*/tests/Feature", "../modules/*/tests/Unit");
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,7 @@ pest()->extend(Tests\TestCase::class)
 |
 */
 
-expect()->extend('toBeOne', function () {
+expect()->extend("toBeOne", function () {
     return $this->toBe(1);
 });
 
@@ -44,4 +47,18 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function login($user = null)
+{
+    // If a user is provided, use that user; otherwise, create a new one
+    $user = $user ?? User::factory()->create();
+
+    // Authenticate the user for the test
+    return test()->actingAs($user);
+}
+
+function user()
+{
+    return User::factory()->create();
 }
