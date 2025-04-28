@@ -15,7 +15,7 @@ use Modules\User\Models\User;
 
 pest()
     ->extend(Tests\TestCase::class)
-    // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in("../modules/*/tests/Feature", "../modules/*/tests/Unit");
 
 /*
@@ -56,4 +56,9 @@ function login($user = null)
 
     // Authenticate the user for the test
     return test()->actingAs($user);
+}
+
+function user()
+{
+    return User::factory()->create();
 }
