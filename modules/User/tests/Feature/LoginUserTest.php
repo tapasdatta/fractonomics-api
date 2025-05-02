@@ -1,10 +1,10 @@
 <?php
 
-use Modules\User\Models\User;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use function Pest\Faker\fake;
 
 beforeEach(function () {
-    // Optionally reset the database or perform setup tasks
+    $this->withoutMiddleware(ThrottleRequests::class);
 });
 
 it("successfully logs in with valid credentials", function () {
