@@ -1,10 +1,11 @@
 <?php
 
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Modules\User\Models\User;
 use function Pest\Faker\fake;
 
 beforeEach(function () {
-    // Setup tasks if needed
+    $this->withoutMiddleware(ThrottleRequests::class);
 });
 
 it("registers a new user successfully", function () {

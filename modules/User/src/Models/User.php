@@ -45,34 +45,6 @@ class User extends Authenticatable
         ];
     }
 
-    public static function createWithAttributes(array $attributes): self
-    {
-        // Create the user with the given attributes
-        $user = self::create($attributes);
-
-        return $user;
-    }
-
-    /**
-     * Generate a new token for the user.
-     *
-     * @return string
-     */
-    public static function generateToken($attributes): string
-    {
-        $user = self::where("email", $attributes["email"])->first();
-
-        if (!$user || !Hash::check($attributes["password"], $user->password)) {
-            throw ValidationException::withMessages([
-                "email" => ["The provided credentials are incorrect."],
-            ]);
-        }
-
-        $token = $user->createToken("auth_token")->plainTextToken;
-
-        return $token;
-    }
-
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
