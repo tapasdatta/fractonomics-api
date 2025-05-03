@@ -20,7 +20,7 @@ it("successfully logs in with valid credentials", function () {
     expect($response->json("message"))->toBe(
         "Login token generated successfully"
     );
-    expect($response->json())->toHaveKey("token");
+    expect($response->json("data"))->toHaveKey("token");
 });
 
 it("fails when the email is incorrect", function () {
