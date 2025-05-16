@@ -4,7 +4,7 @@ namespace Modules\User\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Modules\User\Actions\AuthenticateUser;
-use Modules\User\Actions\RegisterUser;
+use Modules\User\Actions\UserAction;
 use Modules\User\Http\Requests\CreateUserRequest;
 use Illuminate\Validation\ValidationException;
 use Modules\User\Response\WithResponse;
@@ -17,12 +17,12 @@ class AuthController
      * Register a new user in the system.
      *
      * @param CreateUserRequest $request Validated request containing user registration data
-     * @param RegisterUser $register Service to handle user registration
+     * @param UserAction $user Service to handle user registration
      * @return mixed Registration response
      */
-    public function store(CreateUserRequest $request, RegisterUser $register)
+    public function store(CreateUserRequest $request, UserAction $user)
     {
-        $register->handle($request->validated());
+        $user->createWithAttributes($request->validated());
 
         return $this->registerResponse();
     }
