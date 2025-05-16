@@ -18,6 +18,7 @@ class AuthenticateUser
     public function handle(array $attributes)
     {
         $user = $this->getUserByEmail($attributes["email"]);
+
         if ($user && Hash::check($attributes["password"], $user->password)) {
             return $user->createToken("auth_token")->plainTextToken;
         }
