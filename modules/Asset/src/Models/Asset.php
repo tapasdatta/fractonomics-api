@@ -2,12 +2,16 @@
 
 namespace Modules\Asset\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Asset\Database\Factories\AssetFactory;
 use Modules\User\Models\User;
 use Modules\Asset\Enums\AssetStatus;
+use Modules\Asset\Enums\Currency;
 
 class Asset extends Model
 {
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *
@@ -32,10 +36,11 @@ class Asset extends Model
             "funding_deadline" => "datetime",
             "maturity_date" => "datetime",
             "status" => AssetStatus::class,
-            "initial_value" => "decimal:2",
-            "target_funding" => "decimal:2",
-            "current_value" => "decimal:2",
-            "current_funding" => "decimal:2",
+            "initial_value" => "float",
+            "target_funding" => "float",
+            "current_value" => "float",
+            "current_funding" => "float",
+            "currency" => Currency::class,
         ];
     }
 
@@ -47,5 +52,10 @@ class Asset extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected static function newFactory(): AssetFactory
+    {
+        return AssetFactory::new();
     }
 }

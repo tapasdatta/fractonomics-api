@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\User\Database\Factories\UserFactory;
 
 // use Modules\User\Database\Factories\UserFactory;
 
@@ -44,36 +45,8 @@ class User extends Authenticatable
         ];
     }
 
-    public static function createWithAttributes(array $attributes): self
+    protected static function newFactory(): UserFactory
     {
-        // Create the user with the given attributes
-        $user = self::create($attributes);
-
-        return $user;
+        return UserFactory::new();
     }
-
-    /**
-     * Generate a new token for the user.
-     *
-     * @return string
-     */
-    public static function generateToken($attributes): string
-    {
-        $user = self::where("email", $attributes["email"])->first();
-
-        if (!$user || !Hash::check($attributes["password"], $user->password)) {
-            throw ValidationException::withMessages([
-                "email" => ["The provided credentials are incorrect."],
-            ]);
-        }
-
-        $token = $user->createToken("auth_token")->plainTextToken;
-
-        return $token;
-    }
-
-    // protected static function newFactory(): UserFactory
-    // {
-    //     return UserFactory::new();
-    // }
 }

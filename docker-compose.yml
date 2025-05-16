@@ -1,28 +1,29 @@
-name: ${APP_NAME:-Laravel}
+name: fractonomics
 
 services:
     app:
-        container_name: "Fractonomics_app"
+        container_name: "fractonomics_app"
+        depends_on:
+            - db
         build:
             args:
-                user: Fractonomics
+                user: fractonomics
                 uid: 1000
             context: ./.dockerfiles
             dockerfile: Dockerfile
-        # image: Fractonomics
         restart: unless-stopped
         working_dir: /var/www/
         volumes:
             - ./:/var/www
             - ./.dockerfiles/php.ini:/usr/local/etc/php/php.ini
         networks:
-            - Fractonomics
+            - fractonomics
         environment:
             - TZ=Asia/Dhaka
 
     nginx:
         image: nginx:alpine
-        container_name: "Fractonomics_nginx"
+        container_name: "fractonomics_nginx"
         restart: unless-stopped
         ports:
             - "${APP_PORT:-80}:80"
@@ -30,26 +31,26 @@ services:
             - ./:/var/www
             - ./.dockerfiles:/etc/nginx/conf.d/
         networks:
-            - Fractonomics
+            - fractonomics
         environment:
             - TZ=Asia/Dhaka
 
     redis:
         image: redis:alpine
-        container_name: Fractonomics_redis
+        container_name: "fractonomics_redis"
         restart: unless-stopped
         ports:
             - "${REDIS_PORT:-6379}:6379"
         networks:
-            - Fractonomics
+            - fractonomics
         environment:
             - TZ=Asia/Dhaka
 
     cron:
-        container_name: Fractonomics_cron
+        container_name: "fractonomics_cron"
         build:
             args:
-                user: Fractonomics
+                user: fractonomics
                 uid: 1000
             context: ./.dockerfiles
             dockerfile: Dockerfile
@@ -58,36 +59,54 @@ services:
         volumes:
             - ./:/var/www
         networks:
-            - Fractonomics
+            - fractonomics
         environment:
-            SERVICE_NAME: Fractonomics
+            SERVICE_NAME: fractonomics
             SERVICE_TAGS: dev
             DB_CONNECTION:
             DB_HOST: ${DB_HOST:-localhost}
             DB_PORT: ${DB_PORT:-3306}:3306
-            DB_DATABASE: ${DB_DATABASE:-Fractonomics}
-            DB_USERNAME: ${DB_USERNAME:-Fractonomics}
-            DB_PASSWORD: ${DB_PASSWORD:-Fractonomics}
+            DB_DATABASE: ${DB_DATABASE:-fractonomics}
+            DB_USERNAME: ${DB_USERNAME:-fractonomics}
+            DB_PASSWORD: ${DB_PASSWORD:-fractonomics}
 
     db:
         image: mysql:8.4
-        container_name: Fractonomics_db
+        container_name: fractonomics_conn
         restart: always
         volumes:
             - ./.dockerfiles/dbdata:/var/lib/mysql
             - ./.dockerfiles/my.cnf:/etc/mysql/my.cnf
+            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
         ports:
             - "${DB_PORT:-3306}:3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: ${DB_DATABASE:-Fractonomics}
-            MYSQL_USER: ${DB_USERNAME:-Fractonomics}
-            MYSQL_PASSWORD: ${DB_PASSWORD:-Fractonomics}
+            MYSQL_DATABASE: ${DB_DATABASE:-fractonomics_db}
+            MYSQL_USER: ${DB_USERNAME:-fractonomics_user}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-fractonomics_password}
         networks:
-            - Fractonomics
+            - fractonomics
+
+    db_test:
+        image: mysql:8.4
+        container_name: fractonomics_conn_test
+        restart: always
+        volumes:
+            - ./.dockerfiles/dbdata_test:/var/lib/mysql
+            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: fractonomics_test_db
+            MYSQL_USER: fractonomics_user_test
+            MYSQL_PASSWORD: fractonomics_password_test
+        networks:
+            - fractonomics
 
 networks:
-    Fractonomics:
+    fractonomics:
         driver: bridge
 
 volumes:

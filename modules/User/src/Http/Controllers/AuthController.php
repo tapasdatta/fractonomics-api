@@ -3,48 +3,53 @@
 namespace Modules\User\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\User\Actions\AuthenticateUser;
+use Modules\User\Actions\RegisterUser;
 use Modules\User\Http\Requests\CreateUserRequest;
-use Modules\User\Models\User;
+use Illuminate\Validation\ValidationException;
+use Modules\User\Response\WithResponse;
 
 class AuthController
 {
+    use WithResponse;
+
     /**
-     * Store a new user.
+     * Register a new user in the system.
+     *
+     * @param CreateUserRequest $request Validated request containing user registration data
+     * @param RegisterUser $register Service to handle user registration
+     * @return mixed Registration response
      */
-    public function store(CreateUserRequest $request)
+    public function store(CreateUserRequest $request, RegisterUser $register)
     {
-        $attributes = $request->validated();
+        $register->handle($request->validated());
 
-        User::createWithAttributes($attributes);
-
-        return response()->json(
-            [
-                "status" => "success",
-                "message" => "User created successfully",
-            ],
-            201
-        );
+        return $this->registerResponse();
     }
 
     /**
-     * Handle an authentication attempt.
+     * Authenticate a user and generate access token.
+     *
+     * @param Request $request HTTP request containing user credentials
+     * @param AuthenticateUser $login Service to handle user authentication
+     * @return mixed Login response with authentication token
+     * @throws ValidationException When provided credentials are incorrect
      */
-    public function authenticate(Request $request)
+    public function authenticate(Request $request, AuthenticateUser $login)
     {
         $credentials = $request->validate([
             "email" => ["required", "email"],
             "password" => ["required"],
         ]);
 
-        $token = User::generateToken($credentials);
+        $token = $login->handle($credentials);
 
-        return response()->json(
-            [
-                "status" => "success",
-                "token" => $token,
-                "message" => "Login token generated successfully",
-            ],
-            201
-        );
+        if (!$token) {
+            throw ValidationException::withMessages([
+                "email" => ["The provided credentials are incorrect."],
+            ]);
+        }
+
+        return $this->loginResponse($token);
     }
 }
