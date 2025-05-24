@@ -2,15 +2,15 @@
 
 namespace Modules\User\Models;
 
-// use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\User\Database\Factories\UserFactory;
 use Spatie\EventSourcing\Projections\Projection;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Projection
+class User extends Projection implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
@@ -45,5 +45,15 @@ class User extends Projection
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Modules\User\Events\UserCreated;
 use Modules\User\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class UserAction
 {
@@ -39,7 +40,7 @@ class UserAction
         if ($user && Hash::check($attributes["password"], $user->password)) {
             //fire an event: UserLoggedIn
 
-            return $user->createToken("auth_token")->plainTextToken;
+            return JWTAuth::fromUser($user);
         }
         return false;
     }
