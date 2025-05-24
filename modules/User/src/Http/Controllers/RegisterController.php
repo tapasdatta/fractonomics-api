@@ -8,7 +8,7 @@ use Modules\User\Http\Requests\CreateUserRequest;
 use Illuminate\Validation\ValidationException;
 use Modules\User\Response\WithResponse;
 
-class AuthController
+class RegisterController
 {
     use WithResponse;
 
