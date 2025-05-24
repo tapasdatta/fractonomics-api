@@ -2,21 +2,19 @@
 
 namespace Modules\User\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\User\Database\Factories\UserFactory;
+use Modules\User\Projectors\BaseProjection;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-// use Modules\User\Database\Factories\UserFactory;
-
-class User extends Authenticatable
+class User extends BaseProjection implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, Authenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -48,5 +46,15 @@ class User extends Authenticatable
     protected static function newFactory(): UserFactory
     {
         return UserFactory::new();
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

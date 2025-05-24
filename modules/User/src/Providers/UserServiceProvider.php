@@ -15,6 +15,7 @@ class UserServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__ . "/../../config/config.php", "user");
 
+        $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
     }
 }
