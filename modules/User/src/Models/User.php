@@ -2,25 +2,26 @@
 
 namespace Modules\User\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\User\Database\Factories\UserFactory;
-use Spatie\EventSourcing\Projections\Projection;
+use Modules\User\Projectors\BaseProjection;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Projection implements JWTSubject
+class User extends BaseProjection implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasFactory, Notifiable, HasUuids, Authenticatable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ["uuid", "name", "email", "password"];
+    protected $fillable = ["name", "email", "password"];
 
     /**
      * The attributes that should be hidden for serialization.

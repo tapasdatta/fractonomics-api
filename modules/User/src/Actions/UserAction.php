@@ -2,7 +2,6 @@
 namespace Modules\User\Actions;
 
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Modules\User\Events\UserCreated;
 use Modules\User\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -20,8 +19,6 @@ class UserAction
         /*
          * Let's generate a uuid.
          */
-        $attributes["uuid"] = (string) Str::uuid()->toString();
-
         event(new UserCreated($attributes));
     }
 
@@ -49,11 +46,7 @@ class UserAction
     {
         //fire logged out event
 
-        $request->auth();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        JWTAuth::invalidate(JWTAuth::getToken());
     }
 
     /**
