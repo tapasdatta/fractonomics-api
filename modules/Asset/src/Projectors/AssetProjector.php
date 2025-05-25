@@ -3,7 +3,7 @@
 namespace Modules\Asset\Projectors;
 
 use Modules\Asset\Models\Asset;
-use Modules\Assets\Events\AssetCreated;
+use Modules\Asset\Events\AssetCreated;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class AssetProjector extends Projector

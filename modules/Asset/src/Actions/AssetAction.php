@@ -1,7 +1,7 @@
 <?php
 namespace Modules\Asset\Actions;
 
-use Modules\Assets\Events\AssetCreated;
+use Modules\Asset\Events\AssetCreated;
 
 class AssetAction
 {
