@@ -31,4 +31,11 @@ class CreateAssetRequest extends FormRequest
             "currency" => ["required", Rule::enum(Currency::class)],
         ];
     }
+
+    public function validated($keys = null, $default = null)
+    {
+        return array_merge(parent::validated($keys), [
+            "user_id" => $this->user()?->id,
+        ]);
+    }
 }

@@ -2,22 +2,24 @@
 
 namespace Modules\Asset\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Modules\Asset\Database\Factories\AssetFactory;
 use Modules\User\Models\User;
 use Modules\Asset\Enums\AssetStatus;
 use Modules\Asset\Enums\Currency;
+use Modules\Asset\Projectors\BaseProjection;
 
-class Asset extends Model
+class Asset extends BaseProjection
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
+        "user_id",
         "title",
         "description",
         "initial_value",

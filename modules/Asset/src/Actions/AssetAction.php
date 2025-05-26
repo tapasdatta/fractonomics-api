@@ -13,9 +13,6 @@ class AssetAction
      */
     public function createWithAttributes(array $attributes): void
     {
-        /*
-         * Let's generate a uuid.
-         */
         event(new AssetCreated($attributes));
     }
 }

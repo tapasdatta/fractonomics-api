@@ -16,9 +16,6 @@ class UserAction
      */
     public function createWithAttributes(array $attributes): void
     {
-        /*
-         * Let's generate a uuid.
-         */
         event(new UserCreated($attributes));
     }
 

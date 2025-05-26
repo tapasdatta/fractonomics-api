@@ -10,9 +10,6 @@ class EventServiceProvider extends BaseEventServiceProvider
 {
     public function register()
     {
-        Projectionist::addProjectors([
-            UserProjector::class,
-            //anotherProjector
-        ]);
+        Projectionist::addProjectors([UserProjector::class]);
     }
 }
