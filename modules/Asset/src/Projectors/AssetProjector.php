@@ -12,4 +12,9 @@ class AssetProjector extends Projector
     {
         (new Asset($event->assetAttributes))->writeable()->save();
     }
+
+    public function resetState(): void
+    {
+        Asset::query()->delete();
+    }
 }
