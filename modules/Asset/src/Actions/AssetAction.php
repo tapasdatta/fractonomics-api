@@ -1,8 +1,8 @@
 <?php
 namespace Modules\Asset\Actions;
 
-use Modules\Asset\Events\AssetCreated;
 use Illuminate\Support\Str;
+use Modules\Asset\Aggregates\AssetAggregate;
 
 class AssetAction
 {
@@ -19,6 +19,8 @@ class AssetAction
          */
         $attributes["uuid"] = Str::uuid()->toString();
 
-        event(new AssetCreated($attributes["uuid"], $attributes));
+        AssetAggregate::retrieve($attributes["user_uuid"])
+            ->createAsset($attributes["uuid"], $attributes)
+            ->persist();
     }
 }

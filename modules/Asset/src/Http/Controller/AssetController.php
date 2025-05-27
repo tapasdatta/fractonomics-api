@@ -24,7 +24,6 @@ class AssetController
      */
     public function store(CreateAssetRequest $request, AssetAction $asset)
     {
-        // return $request->validated();
         $asset->createWithAttributes($request->validated());
 
         return $this->assetCreatedResponse();
