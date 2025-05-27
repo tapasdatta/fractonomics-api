@@ -13,8 +13,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create("assets", function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->foreignUuid("user_id")->constrained();
+            $table->uuid("uuid")->primary();
+            $table->foreignUuid("user_uuid")->constrained("users", "uuid");
             $table->string("title", 255);
             $table->text("description")->nullable();
             $table

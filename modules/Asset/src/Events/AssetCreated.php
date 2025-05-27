@@ -12,12 +12,14 @@ class AssetCreated extends ShouldBeStored
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $assetAttributes;
+    public $assetUuid;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(array $assetAttributes)
+    public function __construct(string $assetUuid, array $assetAttributes)
     {
+        $this->assetUuid = $assetUuid;
         $this->assetAttributes = $assetAttributes;
     }
 }

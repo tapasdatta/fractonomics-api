@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Hash;
 use Modules\User\Events\UserCreated;
 use Modules\User\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Str;
 
 class UserAction
 {
@@ -16,7 +17,12 @@ class UserAction
      */
     public function createWithAttributes(array $attributes): void
     {
-        event(new UserCreated($attributes));
+        /*
+         * Let's generate a uuid.
+         */
+        $attributes["uuid"] = Str::uuid()->toString();
+
+        event(new UserCreated($attributes["uuid"], $attributes));
     }
 
     /**

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\User\Database\Factories\UserFactory;
-use Modules\User\Projectors\BaseProjection;
+use Spatie\EventSourcing\Projections\Projection;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends BaseProjection implements JWTSubject
+class User extends Projection implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable, HasUuids, Authenticatable;
@@ -21,7 +21,7 @@ class User extends BaseProjection implements JWTSubject
      *
      * @var list<string>
      */
-    protected $fillable = ["name", "email", "password"];
+    protected $fillable = ["uuid", "name", "email", "password"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,6 +41,11 @@ class User extends BaseProjection implements JWTSubject
             "email_verified_at" => "datetime",
             "password" => "hashed",
         ];
+    }
+
+    public function getKeyName()
+    {
+        return "uuid";
     }
 
     protected static function newFactory(): UserFactory

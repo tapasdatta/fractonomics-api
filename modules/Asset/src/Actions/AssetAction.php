@@ -2,6 +2,7 @@
 namespace Modules\Asset\Actions;
 
 use Modules\Asset\Events\AssetCreated;
+use Illuminate\Support\Str;
 
 class AssetAction
 {
@@ -13,6 +14,11 @@ class AssetAction
      */
     public function createWithAttributes(array $attributes): void
     {
-        event(new AssetCreated($attributes));
+        /*
+         * Let's generate a uuid.
+         */
+        $attributes["uuid"] = Str::uuid()->toString();
+
+        event(new AssetCreated($attributes["uuid"], $attributes));
     }
 }

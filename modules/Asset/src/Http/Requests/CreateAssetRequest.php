@@ -35,7 +35,7 @@ class CreateAssetRequest extends FormRequest
     public function validated($keys = null, $default = null)
     {
         return array_merge(parent::validated($keys), [
-            "user_id" => $this->user()?->id,
+            "user_uuid" => $this->user()?->uuid,
         ]);
     }
 }

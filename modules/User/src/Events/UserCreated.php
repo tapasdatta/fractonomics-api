@@ -12,12 +12,14 @@ class UserCreated extends ShouldBeStored
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $userAttributes;
+    public $userUuid;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(array $userAttributes)
+    public function __construct(string $userUuid, array $userAttributes)
     {
+        $this->userUuid = $userUuid;
         $this->userAttributes = $userAttributes;
     }
 }

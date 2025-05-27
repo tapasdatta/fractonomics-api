@@ -8,9 +8,9 @@ use Modules\Asset\Database\Factories\AssetFactory;
 use Modules\User\Models\User;
 use Modules\Asset\Enums\AssetStatus;
 use Modules\Asset\Enums\Currency;
-use Modules\Asset\Projectors\BaseProjection;
+use Spatie\EventSourcing\Projections\Projection;
 
-class Asset extends BaseProjection
+class Asset extends Projection
 {
     use HasFactory, HasUuids;
     /**
@@ -19,7 +19,8 @@ class Asset extends BaseProjection
      * @var list<string>
      */
     protected $fillable = [
-        "user_id",
+        "uuid",
+        "user_uuid",
         "title",
         "description",
         "initial_value",
@@ -44,6 +45,11 @@ class Asset extends BaseProjection
             "current_funding" => "float",
             "currency" => Currency::class,
         ];
+    }
+
+    public function getKeyName()
+    {
+        return "uuid";
     }
 
     /**
