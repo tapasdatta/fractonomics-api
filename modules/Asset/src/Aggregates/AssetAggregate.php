@@ -2,18 +2,20 @@
 namespace Modules\Asset\Aggregates;
 
 use Illuminate\Validation\ValidationException;
+use Modules\Asset\Enums\AssetStatus;
 use Modules\Asset\Events\AssetCreated;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class AssetAggregate extends AggregateRoot
 {
-    public $assetCount = 0;
+    public $pendingCount = 0;
 
     public function createAsset(string $assetUuid, array $attributes)
     {
-        if ($this->assetCount >= 3) {
+        if ($this->pendingCount >= 3) {
             throw ValidationException::withMessages([
-                "asset_limit" => "You cannot create more than 3 assets.",
+                "asset_limit" =>
+                    "You cannot create more than 3 pending assets.",
             ]);
         }
 
@@ -24,6 +26,11 @@ class AssetAggregate extends AggregateRoot
 
     public function applyAssetCreated(AssetCreated $event): void
     {
-        $this->assetCount++;
+        if (
+            isset($event->assetAttributes["status"]) &&
+            $event->assetAttributes["status"] == AssetStatus::PROPOSED->value
+        ) {
+            $this->pendingCount++;
+        }
     }
 }
