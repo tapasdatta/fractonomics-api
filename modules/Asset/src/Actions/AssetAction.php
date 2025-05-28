@@ -11,9 +11,9 @@ class AssetAction
      * Handle the registration of a user.
      *
      * @param  array  $attributes
-     * @return void
+     * @return bool
      */
-    public function createWithAttributes(array $attributes): void
+    public function createWithAttributes(array $attributes): bool
     {
         /*
          * Let's generate a uuid.
@@ -24,8 +24,10 @@ class AssetAction
         $attributes["status"] =
             $attributes["status"] ?? AssetStatus::PROPOSED->value;
 
-        AssetAggregate::retrieve($attributes["user_uuid"])
-            ->createAsset($attributes["uuid"], $attributes)
-            ->persist();
+        $aggregate = AssetAggregate::retrieve($attributes["user_uuid"]);
+
+        $aggregate->createAsset($attributes["uuid"], $attributes)->persist();
+
+        return true;
     }
 }
