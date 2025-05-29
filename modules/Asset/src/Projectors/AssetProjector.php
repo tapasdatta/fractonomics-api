@@ -9,10 +9,13 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class AssetProjector extends Projector
 {
-    public function onAssetCreated(AssetCreated $event)
+    public function onAssetCreated(AssetCreated $event): void
     {
         Log::info("User UUID: ", [$event->aggregateRootUuid()]);
-        (new Asset($event->assetAttributes))->writeable()->save();
+
+        $asset = new Asset($event->assetAttributes);
+
+        $asset->writeable()->save();
     }
 
     public function resetState(): void

@@ -3,8 +3,6 @@
 namespace Modules\Asset\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Modules\Asset\Enums\Currency;
 
 class CreateAssetRequest extends FormRequest
 {
@@ -28,14 +26,6 @@ class CreateAssetRequest extends FormRequest
             "description" => "required|min:5",
             "initial_value" => "required|gte:100|lte:1000",
             "target_funding" => "required|gte:100|lte:1000",
-            "currency" => ["required", Rule::enum(Currency::class)],
         ];
-    }
-
-    public function validated($keys = null, $default = null)
-    {
-        return array_merge(parent::validated($keys), [
-            "user_uuid" => $this->user()?->uuid,
-        ]);
     }
 }

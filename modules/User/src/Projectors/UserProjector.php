@@ -10,7 +10,7 @@ class UserProjector extends Projector
 {
     public function onUserCreated(UserCreated $event): void
     {
-        $user = new User($event->userAttributes->toArray());
+        $user = new User($event->userAttributes);
 
         $user->writeable()->save();
     }

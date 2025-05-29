@@ -22,7 +22,7 @@ class UserService
          */
         $attributes = $attributes->withUuid();
 
-        event(new UserCreated($attributes->uuid, $attributes));
+        event(new UserCreated($attributes->uuid, $attributes->toArray()));
     }
 
     /**

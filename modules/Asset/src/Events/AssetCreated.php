@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Asset\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,15 +10,8 @@ class AssetCreated extends ShouldBeStored
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $assetAttributes;
-    public $assetUuid;
-
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(string $assetUuid, array $assetAttributes)
-    {
-        $this->assetUuid = $assetUuid;
-        $this->assetAttributes = $assetAttributes;
-    }
+    public function __construct(
+        public string $assetUuid,
+        public array $assetAttributes
+    ) {}
 }
