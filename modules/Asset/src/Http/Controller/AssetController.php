@@ -54,9 +54,15 @@ class AssetController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Asset $asset)
     {
-        //
+        $request->validate([
+            "status" => "required",
+        ]);
+
+        AssetService::updateAssetStatus($asset, $request->input("status"));
+
+        return $this->assetCreatedResponse();
     }
 
     /**
