@@ -3,34 +3,45 @@
 namespace Modules\User\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\User\Actions\UserAction;
+use Modules\User\Services\UserService;
+use Modules\User\Data\UserData;
 use Modules\User\Http\Requests\CreateUserRequest;
 use Modules\User\Response\WithResponse;
 
 class AuthController
 {
     use WithResponse;
-
     /**
      * Register a new user.
      */
-    public function store(CreateUserRequest $request, UserAction $user)
+    public function store(CreateUserRequest $request)
     {
-        $user->createWithAttributes($request->validated());
+        $userData = UserData::from([
+            "name" => $request->input("name"),
+            "email" => $request->input("email"),
+            "password" => $request->input("password"),
+        ]);
+
+        UserService::createWithAttributes($userData);
+
         return $this->registerResponse();
     }
 
     /**
      * Authenticate user and generate token.
      */
-    public function authenticate(Request $request, UserAction $user)
+    public function authenticate(Request $request)
     {
-        $credentials = $request->validate([
+        $validated = $request->validate([
             "email" => ["required", "email"],
             "password" => ["required"],
         ]);
 
-        if ($token = $user->createToken($credentials)) {
+        $userData = UserData::from($validated);
+
+        $token = UserService::createToken($userData);
+
+        if ($token) {
             return $this->loginResponse($token);
         }
 
@@ -42,9 +53,10 @@ class AuthController
     /**
      * Log the user out of the application.
      */
-    public function logout(Request $request, UserAction $user)
+    public function logout(Request $request)
     {
-        $user->clearToken($request);
+        UserService::clearToken($request);
+
         return $this->success("Successfully logged out.");
     }
 }

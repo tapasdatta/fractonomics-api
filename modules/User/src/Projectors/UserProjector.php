@@ -8,8 +8,10 @@ use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class UserProjector extends Projector
 {
-    public function onUserCreated(UserCreated $event)
+    public function onUserCreated(UserCreated $event): void
     {
-        (new User($event->userAttributes))->writeable()->save();
+        $user = new User($event->userAttributes->toArray());
+
+        $user->writeable()->save();
     }
 }
