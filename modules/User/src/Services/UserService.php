@@ -2,6 +2,7 @@
 namespace Modules\User\Services;
 
 use Illuminate\Support\Facades\Hash;
+use Modules\User\Data\LoginData;
 use Modules\User\Events\UserCreated;
 use Modules\User\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -28,16 +29,16 @@ class UserService
     /**
      * Handle the authentication of a user.
      *
-     * @param  UserData $attributes
+     * @param  LoginData $credentials
      * @return string | bool
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public static function createToken(UserData $attributes)
+    public static function createToken(LoginData $credentials)
     {
-        $user = User::where("email", $attributes->email)->first();
+        $user = User::where("email", $credentials->email)->first();
 
-        if ($user && Hash::check($attributes->password, $user->password)) {
+        if ($user && Hash::check($credentials->password, $user->password)) {
             //fire an event: UserLoggedIn
 
             return JWTAuth::fromUser($user);

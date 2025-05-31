@@ -3,9 +3,9 @@
 namespace Modules\User\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\User\Data\LoginData;
 use Modules\User\Services\UserService;
 use Modules\User\Data\UserData;
-use Modules\User\Http\Requests\CreateUserRequest;
 use Modules\User\Response\WithResponse;
 
 class AuthController
@@ -14,14 +14,8 @@ class AuthController
     /**
      * Register a new user.
      */
-    public function store(CreateUserRequest $request)
+    public function store(UserData $userData)
     {
-        $userData = UserData::from([
-            "name" => $request->input("name"),
-            "email" => $request->input("email"),
-            "password" => $request->input("password"),
-        ]);
-
         UserService::createWithAttributes($userData);
 
         return $this->registerResponse();
@@ -30,16 +24,9 @@ class AuthController
     /**
      * Authenticate user and generate token.
      */
-    public function authenticate(Request $request)
+    public function authenticate(LoginData $credentials)
     {
-        $validated = $request->validate([
-            "email" => ["required", "email"],
-            "password" => ["required"],
-        ]);
-
-        $userData = UserData::from($validated);
-
-        $token = UserService::createToken($userData);
+        $token = UserService::createToken($credentials);
 
         if ($token) {
             return $this->loginResponse($token);
