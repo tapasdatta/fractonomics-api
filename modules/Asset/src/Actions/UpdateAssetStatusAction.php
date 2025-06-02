@@ -3,8 +3,7 @@ namespace Modules\Asset\Actions;
 
 use Modules\Asset\Aggregates\AssetAggregateRoot;
 use Modules\Asset\Data\AssetData;
-use Modules\Asset\Enums\AssetStatus;
-use Modules\Asset\Models\Asset;
+use Modules\Asset\Data\UpdateAssetStatusData;
 
 class UpdateAssetStatusAction
 {
@@ -14,10 +13,12 @@ class UpdateAssetStatusAction
      * @param  AssetData  $attributes
      * @return bool
      */
-    public static function execute(Asset $asset, AssetStatus $status)
-    {
-        AssetAggregateRoot::retrieve($asset->uuid)
-            ->updateAssetStatus($asset->uuid, $status)
+    public static function execute(
+        string $assetUuid,
+        UpdateAssetStatusData $assetData
+    ) {
+        AssetAggregateRoot::retrieve($assetUuid)
+            ->updateAssetStatus($assetUuid, $assetData)
             ->persist();
 
         return true;
