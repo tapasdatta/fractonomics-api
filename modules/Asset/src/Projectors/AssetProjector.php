@@ -12,7 +12,6 @@ class AssetProjector extends Projector
 {
     public function onAssetCreated(AssetCreated $event): void
     {
-        Log::info("projector got called");
         $asset = new Asset($event->assetAttributes);
 
         $asset->writeable()->save();

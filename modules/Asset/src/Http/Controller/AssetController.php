@@ -3,11 +3,11 @@
 namespace Modules\Asset\Http\Controller;
 
 use Illuminate\Http\Request;
+use Modules\Asset\Actions\CreateAssetAction;
+use Modules\Asset\Data\CreateAssetData;
 use Modules\Asset\Http\Requests\CreateAssetRequest;
-use Modules\Asset\Data\AssetData;
 use Modules\Asset\Models\Asset;
 use Modules\Asset\Response\WithResponse;
-use Modules\Asset\Services\AssetService;
 
 class AssetController
 {
@@ -22,23 +22,19 @@ class AssetController
 
         $assets = Asset::whereUserUuid($user->uuid)->latest()->get();
 
-        return AssetData::collect($assets);
+        return CreateAssetData::collect($assets);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateAssetRequest $request)
-    {
-        $assetData = AssetData::from([
-            "user_uuid" => $request->user()?->uuid,
-            "title" => $request->input("title"),
-            "description" => $request->input("description"),
-            "initial_value" => $request->input("initial_value"),
-            "target_funding" => $request->input("target_funding"),
-        ]);
+    public function store(
+        CreateAssetRequest $request,
+        CreateAssetAction $createAssetAction
+    ) {
+        $assetData = CreateAssetData::from($request->validated());
 
-        AssetService::createWithAttributes($assetData);
+        $createAssetAction->execute($assetData);
 
         return $this->assetCreatedResponse();
     }
@@ -56,13 +52,15 @@ class AssetController
      */
     public function update(Request $request, Asset $asset)
     {
-        $request->validate([
-            "status" => "required",
-        ]);
+        // $request->validate([
+        //     "status" => ["required", Rule::enum(AssetStatus::class)],
+        // ]);
 
-        AssetService::updateAssetStatus($asset, $request->input("status"));
+        // $status = AssetStatus::from($request->input("status"));
 
-        return $this->assetCreatedResponse();
+        // AssetService::updateAssetStatus($asset, $status);
+
+        // return $this->assetCreatedResponse();
     }
 
     /**

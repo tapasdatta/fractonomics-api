@@ -1,10 +1,10 @@
 <?php
 namespace Modules\Asset\Aggregates;
 
-use Modules\Asset\Data\AssetData;
+use Modules\Asset\Data\CreateAssetData;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
-class AssetAggregate extends AggregateRoot
+class AssetAggregateRoot extends AggregateRoot
 {
     protected AssetCreatePartial $createAssetPartial;
     protected AssetStatusPartial $statusUpdatePartial;
@@ -15,17 +15,17 @@ class AssetAggregate extends AggregateRoot
         $this->statusUpdatePartial = new AssetStatusPartial($this);
     }
 
-    public function createAsset(string $assetUuid, AssetData $attributes)
+    public function createAsset(string $assetUuid, CreateAssetData $attributes)
     {
         $this->createAssetPartial->createAsset($assetUuid, $attributes);
 
         return $this;
     }
 
-    public function updateAssetStatus(string $assetUuid, string $newStatus)
-    {
-        $this->statusUpdatePartial->updateAssetStatus($assetUuid, $newStatus);
+    // public function updateAssetStatus(string $assetUuid, AssetStatus $newStatus)
+    // {
+    //     $this->statusUpdatePartial->updateAssetStatus($assetUuid, $newStatus);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

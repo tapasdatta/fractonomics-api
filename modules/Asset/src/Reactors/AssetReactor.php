@@ -9,6 +9,6 @@ class AssetReactor extends Reactor
 {
     public function onAssetCreated(AssetCreated $event)
     {
-        Log::info("Asset Creator reactor is called");
+        //Logic will be implemented later
     }
 }

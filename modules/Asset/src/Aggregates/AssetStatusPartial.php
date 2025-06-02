@@ -8,38 +8,28 @@ use Spatie\EventSourcing\AggregateRoots\AggregatePartial;
 
 class AssetStatusPartial extends AggregatePartial
 {
-    protected string $status = AssetStatus::PROPOSED->value;
+    protected ?AssetStatus $status = null;
 
-    protected array $allowedTransitions = [
-        "proposed" => ["voting"],
-        "voting" => ["funding"],
-        "funding" => ["active"],
-        "active" => ["matured"],
-    ];
+    // public function updateAssetStatus(string $assetUuid, AssetStatus $newStatus)
+    // {
+    //     $currentStatus = $this->status ?? AssetStatus::PROPOSED;
 
-    public function updateAssetStatus(string $assetUuid, string $newStatus)
-    {
-        if (!$this->isValidTransition($this->status, $newStatus)) {
-            throw ValidationException::withMessages([
-                "status" => "Invalid status transition from {$this->status} to $newStatus.",
-            ]);
-        }
+    //     if (!$currentStatus->canTransitionTo($newStatus)) {
+    //         throw ValidationException::withMessages([
+    //             "status" => "Cannot change status from {$currentStatus->value} to {$newStatus->value}",
+    //         ]);
+    //     }
 
-        $this->recordThat(new AssetStatusUpdated($assetUuid, $newStatus));
+    //     $this->recordThat(
+    //         new AssetStatusUpdated($assetUuid, $newStatus->value)
+    //     );
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    protected function applyAssetStatusUpdated(AssetStatusUpdated $event)
-    {
-        $this->status = $event->newStatus;
-    }
-
-    protected function isValidTransition(string $from, string $to)
-    {
-        $from = strtolower($from);
-        $to = strtolower($to);
-
-        return in_array($to, $this->allowedTransitions[$from] ?? []);
-    }
+    // protected function applyAssetStatusUpdated(AssetStatusUpdated $event)
+    // {
+    //     $this->status =
+    //         AssetStatus::from($event->newStatus) ?? AssetStatus::PROPOSED;
+    // }
 }

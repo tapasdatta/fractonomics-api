@@ -4,6 +4,7 @@ namespace Modules\Asset\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Modules\Asset\Enums\AssetStatus;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
 class AssetStatusUpdated extends ShouldBeStored
@@ -12,6 +13,6 @@ class AssetStatusUpdated extends ShouldBeStored
 
     public function __construct(
         public string $assetUuid,
-        public string $newStatus
+        public AssetStatus $newStatus
     ) {}
 }

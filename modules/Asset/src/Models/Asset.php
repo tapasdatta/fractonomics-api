@@ -66,4 +66,16 @@ class Asset extends Projection
     {
         return AssetFactory::new();
     }
+
+    public function getAssetStatus(): string
+    {
+        return $this->status->transitionTo();
+    }
+
+    public function scopeProposedAssets($query, $user_uuid)
+    {
+        return $query
+            ->where("user_uuid", $user_uuid)
+            ->where("status", AssetStatus::PROPOSED);
+    }
 }
