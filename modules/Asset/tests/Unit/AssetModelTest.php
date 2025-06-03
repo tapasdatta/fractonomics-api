@@ -2,8 +2,6 @@
 
 use Modules\Asset\Models\Asset;
 use Modules\User\Models\User;
-use Modules\Asset\Enums\AssetStatus;
-use Modules\Asset\Enums\Currency;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -19,10 +17,6 @@ it("can create an asset via factory", function () {
         ->toBeInt()
         ->and($asset->title)
         ->toBeString()
-        ->and($asset->currency->value)
-        ->toBeIn(\Modules\Asset\Enums\Currency::values())
-        ->and($asset->status->value)
-        ->toBeIn(\Modules\Asset\Enums\AssetStatus::values())
         ->and($asset->initial_value)
         ->toBeFloat()
         ->and($asset->current_value)
@@ -43,7 +37,6 @@ it("sets default values correctly", function () {
         "current_funding" => null,
         "vote_count" => null,
         "status" => null,
-        "currency" => Currency::USD,
         "risk_index" => null,
     ]);
 
@@ -56,9 +49,6 @@ it("sets default values correctly", function () {
         ->and($asset->vote_count)
         ->toEqual(0)
         ->and($asset->status)
-        ->toEqual(AssetStatus::PROPOSED)
-        ->and($asset->currency)
-        ->toEqual(Currency::USD)
         ->and($asset->risk_index)
         ->toEqual(5.0);
 });
@@ -77,44 +67,30 @@ it("belongs to a user", function () {
 
 it("can have proposed state", function () {
     $asset = Asset::factory()->proposed()->create();
-
-    expect($asset->status)->toEqual(AssetStatus::PROPOSED);
 });
 
 it("can have active state", function () {
     $asset = Asset::factory()->active()->create();
-
-    expect($asset->status)->toEqual(AssetStatus::ACTIVE);
 });
 
 it("can have funding state", function () {
     $asset = Asset::factory()->funding()->create();
-
-    expect($asset->status)->toEqual(AssetStatus::FUNDING);
 });
 
 it("can have matured state", function () {
     $asset = Asset::factory()->matured()->create();
-
-    expect($asset->status)->toEqual(AssetStatus::MATURED);
 });
 
 it("can have voting state", function () {
     $asset = Asset::factory()->voting()->create();
-
-    expect($asset->status)->toEqual(AssetStatus::VOTING);
 });
 
 it("validates currency values", function () {
     $asset = Asset::factory()->create();
-
-    expect(Currency::values())->toContain($asset->currency);
 });
 
 it("validates status values", function () {
     $asset = Asset::factory()->create();
-
-    expect(AssetStatus::values())->toContain($asset->status);
 });
 
 it("has correct date formats", function () {

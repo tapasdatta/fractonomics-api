@@ -3,8 +3,9 @@
 namespace Modules\Asset\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Modules\Asset\Enums\AssetStatus;
+use Modules\Asset\States\AssetState;
+use Modules\Asset\States\Proposed;
+use Spatie\ModelStates\Validation\ValidStateRule;
 
 class CreateAssetRequest extends FormRequest
 {
@@ -29,7 +30,7 @@ class CreateAssetRequest extends FormRequest
             "description" => "required|min:5",
             "initial_value" => "required|gte:100|lte:1000",
             "target_funding" => "required|gte:100|lte:1000",
-            "status" => ["required", Rule::enum(AssetStatus::class)],
+            "state" => ["required", new ValidStateRule(AssetState::class)],
         ];
     }
 
@@ -37,7 +38,7 @@ class CreateAssetRequest extends FormRequest
     {
         $this->merge([
             "user_uuid" => $this->user()->uuid,
-            "status" => AssetStatus::PROPOSED->value,
+            "state" => Proposed::class,
         ]);
     }
 

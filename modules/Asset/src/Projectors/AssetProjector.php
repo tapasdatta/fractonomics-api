@@ -2,10 +2,9 @@
 
 namespace Modules\Asset\Projectors;
 
-use Illuminate\Support\Facades\Log;
 use Modules\Asset\Models\Asset;
 use Modules\Asset\Events\AssetCreated;
-use Modules\Asset\Events\AssetStatusUpdated;
+use Modules\Asset\Events\AssetStateUpdated;
 use Spatie\EventSourcing\EventHandlers\Projectors\Projector;
 
 class AssetProjector extends Projector
@@ -17,15 +16,14 @@ class AssetProjector extends Projector
         $asset->writeable()->save();
     }
 
-    public function onAssetStatusUpdated(AssetStatusUpdated $event): void
+    public function onAssetStateUpdated(AssetStateUpdated $event): void
     {
         $asset = Asset::where("uuid", $event->assetUuid)->first();
 
         if ($asset) {
-            $asset = $asset->writeable(); // Make the model writeable
+            $asset->state = $event->assetAttributes["state"];
 
-            $asset->status = $event->newStatus;
-            $asset->save();
+            $asset->writeable()->save();
         }
     }
 

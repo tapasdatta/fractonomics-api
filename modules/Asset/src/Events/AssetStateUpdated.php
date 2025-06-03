@@ -6,7 +6,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Spatie\EventSourcing\StoredEvents\ShouldBeStored;
 
-class AssetStatusUpdated extends ShouldBeStored
+class AssetStateUpdated extends ShouldBeStored
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

@@ -3,7 +3,7 @@ namespace Modules\User\Data;
 
 use Spatie\LaravelData\Data;
 
-class LoginData extends Data
+class LoginUserData extends Data
 {
     public function __construct(
         public string $email,

@@ -2,9 +2,9 @@
 namespace Modules\Asset\Aggregates;
 
 use Modules\Asset\Data\CreateAssetData;
-use Modules\Asset\Data\UpdateAssetStatusData;
+use Modules\Asset\Data\StateAssetData;
 use Modules\Asset\Events\AssetCreated;
-use Modules\Asset\Events\AssetStatusUpdated;
+use Modules\Asset\Events\AssetStateUpdated;
 use Spatie\EventSourcing\AggregateRoots\AggregateRoot;
 
 class AssetAggregateRoot extends AggregateRoot
@@ -16,12 +16,12 @@ class AssetAggregateRoot extends AggregateRoot
         return $this;
     }
 
-    public function updateAssetStatus(
+    public function updateAssetState(
         string $assetUuid,
-        UpdateAssetStatusData $assetData
+        StateAssetData $assetData
     ) {
         $this->recordThat(
-            new AssetStatusUpdated($assetUuid, $assetData->toArray())
+            new AssetStateUpdated($assetUuid, $assetData->toArray())
         );
 
         return $this;

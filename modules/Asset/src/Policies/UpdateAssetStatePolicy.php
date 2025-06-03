@@ -5,7 +5,7 @@ namespace Modules\Asset\Policies;
 use Modules\Asset\Models\Asset;
 use Modules\User\Models\User;
 
-class UpdateAssetStatusPolicy
+class UpdateAssetStatePolicy
 {
     /**
      * Determine if the given post can be updated by the user.

@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Asset\Database\Factories\AssetFactory;
 use Modules\User\Models\User;
-use Modules\Asset\Enums\AssetStatus;
-use Modules\Asset\Enums\Currency;
+use Modules\Asset\States\AssetState;
+use Modules\Asset\States\Proposed;
 use Spatie\EventSourcing\Projections\Projection;
+use Spatie\ModelStates\HasStates;
 
 class Asset extends Projection
 {
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, HasStates;
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +27,7 @@ class Asset extends Projection
         "initial_value",
         "target_funding",
         "currency",
+        "state",
     ];
 
     /**
@@ -38,12 +40,11 @@ class Asset extends Projection
         return [
             "funding_deadline" => "datetime",
             "maturity_date" => "datetime",
-            "status" => AssetStatus::class,
+            "state" => AssetState::class,
             "initial_value" => "float",
             "target_funding" => "float",
             "current_value" => "float",
             "current_funding" => "float",
-            "currency" => Currency::class,
         ];
     }
 
@@ -65,12 +66,5 @@ class Asset extends Projection
     protected static function newFactory(): AssetFactory
     {
         return AssetFactory::new();
-    }
-
-    public function scopeProposedAssets($query, $user_uuid)
-    {
-        return $query
-            ->where("user_uuid", $user_uuid)
-            ->where("status", AssetStatus::PROPOSED);
     }
 }

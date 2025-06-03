@@ -1,22 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\User\Http\Controllers\AuthController;
-
-Route::get("", function () {
-    return "Hello World";
-});
+use Modules\User\Http\Controllers\CreateUserController;
+use Modules\User\Http\Controllers\LoginController;
+use Modules\User\Http\Controllers\LogoutController;
 
 Route::middleware(["guest", "throttle:10,1"])->group(function () {
-    Route::post("/register", [AuthController::class, "store"])->name(
-        "register"
-    );
+    Route::post("/register", [CreateUserController::class, "store"]);
 
-    Route::post("/login", [AuthController::class, "authenticate"])->name(
-        "token"
-    );
+    Route::post("/login", [LoginController::class, "authenticate"]);
 });
 
 Route::middleware(["auth:api", "throttle:10,1"])->group(function () {
-    Route::post("/logout", [AuthController::class, "logout"])->name("logout");
+    Route::post("/logout", [LogoutController::class, "logout"]);
 });

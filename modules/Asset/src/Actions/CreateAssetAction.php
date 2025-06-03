@@ -16,10 +16,10 @@ class CreateAssetAction
      */
     public static function execute(CreateAssetData $assetData): bool
     {
-        $uuid = (string) Str::uuid();
+        $assetData->uuid = (string) Str::uuid();
 
-        AssetAggregateRoot::retrieve($uuid)
-            ->createAsset($uuid, $assetData)
+        AssetAggregateRoot::retrieve($assetData->uuid)
+            ->createAsset($assetData->uuid, $assetData)
             ->persist();
 
         return true;

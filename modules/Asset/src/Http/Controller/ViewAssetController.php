@@ -3,7 +3,8 @@
 namespace Modules\Asset\Http\Controller;
 
 use Illuminate\Http\Request;
-use Modules\Asset\Data\CreateAssetData;
+use Illuminate\Support\Facades\Gate;
+use Modules\Asset\Data\ViewAssetData;
 use Modules\Asset\Models\Asset;
 use Modules\Asset\Response\WithResponse;
 
@@ -20,14 +21,16 @@ class ViewAssetController
 
         $assets = Asset::whereUserUuid($user->uuid)->latest()->get();
 
-        return CreateAssetData::collect($assets);
+        return ViewAssetData::collect($assets);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Asset $asset)
     {
-        //
+        Gate::authorize("view", $asset);
+
+        return ViewAssetData::from($asset);
     }
 }

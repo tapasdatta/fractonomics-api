@@ -3,6 +3,7 @@ namespace Modules\Asset\Http\Requests;
 
 use Illuminate\Validation\Validator;
 use Modules\Asset\Models\Asset;
+use Modules\Asset\States\Proposed;
 
 class ValidateAssetLimit
 {
@@ -22,6 +23,8 @@ class ValidateAssetLimit
     {
         $user = request()->user();
 
-        return Asset::proposedAssets($user->uuid)->count() >= 3;
+        return Asset::where("user_uuid", $user->uuid)
+            ->whereState("state", Proposed::class)
+            ->count() >= 3;
     }
 }

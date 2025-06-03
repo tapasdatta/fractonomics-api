@@ -3,8 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Asset\Enums\AssetStatus;
-use Modules\Asset\Enums\Currency;
 
 return new class extends Migration {
     /**
@@ -17,16 +15,12 @@ return new class extends Migration {
             $table->foreignUuid("user_uuid")->constrained("users", "uuid");
             $table->string("title", 255);
             $table->text("description")->nullable();
-            $table
-                ->enum("currency", Currency::values())
-                ->default(Currency::USD);
+            $table->string("currency")->default("USD");
             $table->decimal("initial_value", 15, 2);
             $table->decimal("current_value", 15, 2)->default(0.0);
             $table->decimal("target_funding", 15, 2);
             $table->decimal("current_funding", 15, 2)->default(0.0);
-            $table
-                ->enum("status", AssetStatus::values())
-                ->default(AssetStatus::PROPOSED);
+            $table->string("state");
             $table->integer("vote_count")->default(0);
             $table->timestamp("funding_deadline")->nullable();
             $table->timestamp("maturity_date")->nullable();

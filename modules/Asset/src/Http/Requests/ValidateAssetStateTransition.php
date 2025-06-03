@@ -4,7 +4,7 @@ namespace Modules\Asset\Http\Requests;
 use Illuminate\Validation\Validator;
 use Modules\Asset\Models\Asset;
 
-class ValidateAssetStatusTransition
+class ValidateAssetStateTransition
 {
     public function __invoke(Validator $validator)
     {
@@ -12,8 +12,8 @@ class ValidateAssetStatusTransition
             $validator
                 ->errors()
                 ->add(
-                    "status",
-                    "You cannot transition to {{request->input('status')}}"
+                    "state",
+                    "You cannot transition to {{request->input('state')}}"
                 );
         }
     }
