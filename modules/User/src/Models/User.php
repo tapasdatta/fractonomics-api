@@ -5,6 +5,7 @@ namespace Modules\User\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\User\Database\Factories\UserFactory;
@@ -14,7 +15,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Projection implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable, HasUuids, Authenticatable;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable,
+        HasUuids,
+        Authenticatable,
+        Authorizable;
 
     /**
      * The attributes that are mass assignable.

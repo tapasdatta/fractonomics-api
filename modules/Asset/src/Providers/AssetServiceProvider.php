@@ -2,7 +2,10 @@
 
 namespace Modules\Asset\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Modules\Asset\Models\Asset;
+use Modules\Asset\Policies\UpdateAssetStatusPolicy;
 
 class AssetServiceProvider extends ServiceProvider
 {
@@ -17,5 +20,7 @@ class AssetServiceProvider extends ServiceProvider
 
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+
+        Gate::policy(Asset::class, UpdateAssetStatusPolicy::class);
     }
 }

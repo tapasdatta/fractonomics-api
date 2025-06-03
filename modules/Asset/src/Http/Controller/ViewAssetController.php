@@ -7,7 +7,7 @@ use Modules\Asset\Data\CreateAssetData;
 use Modules\Asset\Models\Asset;
 use Modules\Asset\Response\WithResponse;
 
-class UpdateAssetStatusController
+class ViewAssetController
 {
     use WithResponse;
 

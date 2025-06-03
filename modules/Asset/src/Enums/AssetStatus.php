@@ -15,33 +15,21 @@ enum AssetStatus: string
         return array_map(fn($case) => $case->value, self::cases());
     }
 
-    public function transitionTo(): string
-    {
-        $status = match ($this->value) {
-            AssetStatus::PROPOSED => "voting",
-            AssetStatus::VOTING => "funding",
-            AssetStatus::FUNDING => "active",
-            AssetStatus::ACTIVE => "matured",
-            AssetStatus::MATURED => "",
-        };
-
-        return $status;
-    }
-
     public static function transitions(): array
     {
         return [
-            self::PROPOSED => self::VOTING,
-            self::VOTING => self::FUNDING,
-            self::FUNDING => self::ACTIVE,
-            self::ACTIVE => self::MATURED,
+            self::PROPOSED->value => self::VOTING,
+            self::VOTING->value => self::FUNDING,
+            self::FUNDING->value => self::ACTIVE,
+            self::ACTIVE->value => self::MATURED,
         ];
     }
 
-    public function canTransitionTo(self $newStatus): bool
+    public function canTransitionTo(string $newStatus): bool
     {
         $validTransitions = self::transitions();
 
-        return ($validTransitions[$this] ?? null) === $newStatus;
+        return ($validTransitions[$this->value] ?? null)?->value === $newStatus;
     }
+
 }

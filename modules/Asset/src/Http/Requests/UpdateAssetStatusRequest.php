@@ -13,7 +13,7 @@ class UpdateAssetStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()?->can("update", $this->asset);
     }
 
     /**
@@ -36,8 +36,8 @@ class UpdateAssetStatusRequest extends FormRequest
         ]);
     }
 
-    public function after(): array
-    {
-        return [new ValidateAssetLimit()];
-    }
+    // public function after(): array
+    // {
+    //     return [new ValidateAssetLimit()];
+    // }
 }
