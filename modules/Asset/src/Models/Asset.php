@@ -1,24 +1,16 @@
 <?php
-
 namespace Modules\Asset\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Asset\Database\Factories\AssetFactory;
-use Modules\User\Models\User;
+use Modules\Asset\QueryBuilders\AssetQueryBuilder;
 use Modules\Asset\States\AssetState;
-use Modules\Asset\States\Proposed;
 use Spatie\EventSourcing\Projections\Projection;
 use Spatie\ModelStates\HasStates;
 
 class Asset extends Projection
 {
-    use HasFactory, HasUuids, HasStates;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    use HasFactory, HasStates;
+
     protected $fillable = [
         "uuid",
         "user_uuid",
@@ -30,11 +22,6 @@ class Asset extends Projection
         "state",
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -48,23 +35,13 @@ class Asset extends Projection
         ];
     }
 
-    public function getKeyName()
+    public function getKeyName(): string
     {
         return "uuid";
     }
 
-    /**
-     * Get the user that owns the asset.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function newEloquentBuilder($query): AssetQueryBuilder
     {
-        return $this->belongsTo(User::class);
-    }
-
-    protected static function newFactory(): AssetFactory
-    {
-        return AssetFactory::new();
+        return new AssetQueryBuilder($query);
     }
 }
