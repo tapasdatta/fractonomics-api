@@ -2,8 +2,10 @@
 namespace Modules\Asset\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Bus;
 use Modules\Asset\QueryBuilders\AssetQueryBuilder;
 use Modules\Asset\States\AssetState;
+use Modules\Asset\States\Proposed;
 use Spatie\EventSourcing\Projections\Projection;
 use Spatie\ModelStates\HasStates;
 
@@ -43,5 +45,10 @@ class Asset extends Projection
     public function newEloquentBuilder($query): AssetQueryBuilder
     {
         return new AssetQueryBuilder($query);
+    }
+
+    public function isProposed()
+    {
+        return $this->state->equals(Proposed::class);
     }
 }
